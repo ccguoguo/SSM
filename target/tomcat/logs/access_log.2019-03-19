@@ -1,0 +1,11 @@
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:10:41 +0800] "GET /KittyMao HTTP/1.1" 302 - http-bio-8090-exec-2 0
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:10:41 +0800] "GET /KittyMao/ HTTP/1.1" 404 969 http-bio-8090-exec-3 17
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:10:41 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8090-exec-4 0
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:10:59 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-5 819
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:19 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-8 4
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:20 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-10 2
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:20 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-10 1
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:20 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-10 1
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:20 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-10 1
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:21 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-10 1
+0:0:0:0:0:0:0:1 - - [19/Mar/2019:14:15:21 +0800] "GET /KittyMao/kitty.jsp HTTP/1.1" 200 277 http-bio-8090-exec-10 1

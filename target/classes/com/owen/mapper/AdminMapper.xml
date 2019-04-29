@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.owen.mapper.AdminMapper" >
+	<!-- 查一条数据 -->
+	<select id="adminLogin" parameterType="admin" resultType="admin">
+	<!-- #{}占位符 = ? -->
+  		select admin_name,admin_password from admin 
+  		where admin_name = #{admin_name} and admin_password = #{admin_password}
+  	</select>
+  	
+  	<!-- 模糊查询 -->
+  	<select id="selectAdminsByIdOrName" parameterType="string" resultType="admin">
+  	<!-- 如果传入的参数是简单数据类型，${}里面必须写value(不会就看String类的源码) -->
+  	<!-- ${}表示拼接sql串 -->
+  		<!-- select * from admin where admin_id like '%${value}%' -->
+  		     select * from admin where admin_name like "%"#{v}"%"
+  	</select>
+  	
+  	<!-- 查询全部 -->
+  	<select id="selectAdmins" resultType="admin">
+  		select * from admin
+  	</select>
+  	
+  	<!-- 插入数据 -->
+  	<insert id="insertAdmin" parameterType="admin">
+  	<selectKey keyColumn="admin_id" keyProperty="admin_id" order="AFTER" resultType="int">
+  		select last_insert_id()
+  	</selectKey>
+  		insert into admin(admin_name,admin_password,date) values(#{admin_name},#{admin_password},now())
+  	</insert>
+  	
+  	<!-- 删除数据 -->
+  	<delete id="deleteAdmin" parameterType="int">
+  		delete from admin where admin_id = #{v}
+  	</delete>
+  	
+  	<!-- 修改数据 -->
+  	<update id="updateAdmin" parameterType="admin">
+  		update admin set admin_name=#{admin_name},admin_password=#{admin_password},date=#{date} where admin_id=#{admin_id}
+  	</update>
+</mapper>

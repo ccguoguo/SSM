@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.owen.mapper.CategoryMapper">
+	<!-- 请开始你的表演 -->
+	
+	<!-- 1.增 -->
+	<insert id="insertCategory" parameterType="category">
+	<selectKey keyColumn="categoryID" keyProperty="categoryID" order="AFTER" resultType="int">
+  		select last_insert_id()
+  	</selectKey>
+		insert into categorys(category_name,category_desc) values(#{category_name},#{category_desc})
+	</insert>
+	
+	<!-- 2.删 -->
+	<delete id="deleteCategory" parameterType="int">
+		delete from categorys where categoryID = #{v}
+	</delete>
+	
+	<!-- 3.改 -->
+	<update id="updateCategory" parameterType="category">
+		update categorys set category_name = #{category_name},category_desc = #{category_desc} where categoryID =#{categoryID}
+	</update>
+	
+	<!-- 4.重名判断 -->
+	<select id="duplicateName" parameterType="category" resultType="string">
+		select * from categorys where category_name = #{category_name} and categoryID != #{categoryID}
+	</select>
+	
+	<!-- 5.获得记录条数 -->
+	<select id="getTotalRecord" resultType="int">
+		select count(*) from categorys
+	</select>
+	
+	<!-- 6.根据ID查询目录信息 -->
+	<select id="selectCategoryByID" parameterType="int" resultType="category">
+		select * from categorys where categoryID = #{v}
+	</select>
+	
+	<!-- 7.查询所有目录信息 -->
+	<select id="selectAllCategory" resultType="category">
+		select * from categorys
+	</select>
+	
+	<!-- 8.分页查 -->
+	<select id="selectCategoryByPage" resultType="category">
+<!-- 		<bind name="offset" value="(currentPage-1)*pageSize"/> -->
+		select * from categorys <!-- limit #{offset},#{pageSize} -->
+	</select>
+	
+	<!-- 9.查询该目录下的所有产品 -->
+	<resultMap type="category" id="CategoryResult">
+		<result column="category_name" property="category_name"/>
+		<result column="category_desc" property="category_desc"/>
+		
+		<collection property="list" ofType="product">
+			<id column="productID" property="productID"/>
+  		<result column="product_name" property="product_name"/>
+  		<result column="categoryID" property="category.categoryID"/>
+  		<result column="category_name" property="category.category_name"/>
+		<result column="category_desc" property="category.category_desc"/>
+		</collection>
+	</resultMap>
+	
+	<select id="selectProductByCID" parameterType="int" resultMap="CategoryResult">
+		select c.*,p.productID,p.product_name from products p,categorys c where p.categoryID = c.categoryID and c.categoryID = #{v}
+	</select>
+	
+</mapper>

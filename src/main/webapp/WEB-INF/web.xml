@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://java.sun.com/xml/ns/javaee" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>kittyMM</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <!-- 启动spring容器 -->
+  <context-param>
+  	<param-name>contextConfigLocation</param-name>
+  	<param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <!-- 配置SpringMVC的前端控制器DispatcherServlet,和配置servlet差不多 -->
+  <servlet>
+  	<servlet-name>springMVCFirst</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<!-- 如果没配置上下文,则默认找/WEB-INF/springMVCFirst-servlet.xml -->
+  	<init-param>
+  	<!-- 配置加载SpringMVC的主配置文件,和spring类似 -->
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:springMVC.xml</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>springMVCFirst</servlet-name>
+  	<!-- springMVC的拦截规则,拦到控制层 -->
+  	<!-- /*全抓过来
+  		 /*.xx 以xx结尾
+  		 / 拦截所有(不包括jsp),在前台使用,面向消费者;这里需要对静态资源(js,jpg,css)放行
+  	 -->
+  	<url-pattern>*.action</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 配置过滤器,解决Post提交乱码问题 -->
+  <filter>
+  	<filter-name>encoding1</filter-name>
+  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name>
+  		<param-value>utf-8</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>encoding1</filter-name>
+  	<url-pattern>*.action</url-pattern>
+  </filter-mapping>
+  
+  <!-- 配置登录拦截器 -->
+</web-app>
+
+
+
+
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.owen.mapper.ProviderMapper">
+	<!-- 请开始你的表演 -->
+	
+	<!-- 1.增 -->
+	<insert id="insertProvider" parameterType="provider">
+	<selectKey keyColumn="providerID" keyProperty="providerID" order="AFTER" resultType="int">
+  		select last_insert_id()
+  	</selectKey>
+		insert into providers(provider_name,provider_add,provider_tel,account,email) 
+		values(#{provider_name},#{provider_add},#{provider_tel},#{account},#{email})
+	</insert>
+	
+	<!-- 2.删 -->
+	<delete id="deleteProvider" parameterType="int">
+		delete from providers where providerID = #{v}
+	</delete>
+	
+	<!-- 3.分页查 -->
+	<select id="selectProviderByPage" resultType="provider">
+<!-- 		<bind name="offset" value="(currentPage-1)*pageSize"/> -->
+		select * from providers <!-- limit #{offset},#{pageSize} -->
+	</select>
+	
+	<!-- 4.改 -->
+	<update id="updateProvider" parameterType="provider">
+		update providers set provider_name = #{provider_name},provider_add = #{provider_add},
+		provider_tel = #{provider_tel},account = #{account},email = #{email} where providerID = #{providerID}
+	</update>
+	
+	<!-- 5.获得记录条数 -->
+	<select id="getTotalRecord" resultType="int">
+		select count(*) from providers
+	</select>
+	
+	<!-- 6.重名判断 -->
+	<select id="duplicateName" parameterType="provider" resultType="string">
+		select * from providers where provider_name = #{provider_name} and providerID != #{providerID}
+	</select>
+	
+	<!-- 7.根据ID查询供应商信息 -->
+	<select id="selectProviderByID" parameterType="int" resultType="provider">
+		select * from providers where providerID = #{v}
+	</select>
+	
+	<!-- 8.查询所有供应商 -->
+	<select id="selectAllProvider" resultType="provider">
+		select * from providers
+	</select>
+	
+</mapper>

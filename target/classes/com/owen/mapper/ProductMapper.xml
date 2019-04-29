@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.owen.mapper.ProductMapper" >
+  	
+  	<!-- 别名product=com.ecms.entity.Product -->
+  	<resultMap type="product" id="ProductResult">
+  	
+  	
+  	
+  	<!-- 手动配置文件 -->
+  		<id column="productID" property="productID"/>
+  		<result column="product_name" property="product_name"/>
+  		<result column="income_price" property="income_price"/>
+  		<result column="quantity" property="quantity"/>
+  		<result column="sales_price" property="sales_price"/>
+  		<result column="income_time" property="income_time"/>
+  		
+  		<!-- 供应商和目录三表联查 -->
+  		<!-- 别名provider,category -->
+  		<!-- <association property="provider" javaType="provider">
+  			<id column="providerID" property="providerID"/>
+  			<result column="provider_name" property="provider_name"/>
+  		</association>
+  		<association property="category" javaType="category">
+  			<id column="categoryID" property="categoryID"/>
+  			<result column="category_name" property="category_name"/>
+  		</association> -->
+  		
+  		<!-- 供应商和目录分次查询 -->
+  		<association property="provider" javaType="provider" 
+  		select="com.ecms.dao.ProviderMapper.selectProviderByID" column="providerID"></association>
+  		<association property="category" javaType="category" 
+  		select="com.ecms.dao.CategoryMapper.selectCategoryByID" column="categoryID"></association>
+  	</resultMap>
+  	
+  	<!-- sql语句块 -->
+  	<sql id="selectModol">
+  		p.*,cate.category_name,prov.provider_name
+  	</sql>
+  	
+  	<!-- 1.查询全部(pagehelper) -->
+  	<select id="selectAllProduct" resultMap="ProductResult">
+  		<!-- select <include refid="selectModol"></include> from products p,categorys cate,providers prov 
+  		where p.providerID = prov.providerID and p.categoryID = cate.categoryID order by p.productID -->
+  		select * from products
+  	</select>
+  	
+  	<!-- 2.分页查询 -->
+  	<!-- <select id="selectProductByPage" parameterType="product" resultMap="ProductResult">
+  		select * from products limit #{map.offset},#{map.limit}
+  	</select> -->
+  	
+  	<!-- 3.按条件查询 -->
+  	<select id="selectProductByCondition" parameterType="product" resultMap="ProductResult">
+  		select * from products 
+  		
+  		<!-- 该标签可自动处理and -->
+  		<where>
+  			<if test="product_name != null and product_name != ''">
+  				and product_name like "%"#{product_name}"%"
+  			</if>
+  			<if test="provider.providerID != 0">
+  				and providerID = #{provider.providerID}
+  			</if>
+  			<if test="category.categoryID != 0">
+  				and categoryID = #{category.categoryID}
+  			</if>
+  		</where>
+  	</select>
+  	
+  	<!-- 4.获得记录条数 -->
+  	<select id="getTotalRecord" resultType="int">
+  		select count(*) from products
+  	</select>
+  	
+  	<!-- 5.增(注意:provider.providerID,category.categoryID) -->
+  	<insert id="insertProduct" parameterType="product">
+  	<selectKey keyColumn="productID" keyProperty="productID" order="AFTER" resultType="int">
+  		select last_insert_id()
+  	</selectKey>
+  		insert into products(product_name,income_price,providerID,quantity,sales_price,categoryID,income_time) 
+		values(#{product_name},#{income_price},#{provider.providerID},#{quantity},#{sales_price},#{category.categoryID},#{income_time})
+  	</insert>
+  	
+  	<!-- 6.改(注意:provider.providerID,category.categoryID) -->
+  	<update id="updateProduct" parameterType="product">
+  		update products set product_name=#{product_name},income_price=#{income_price},providerID=#{provider.providerID},quantity=#{quantity}
+  		,sales_price=#{sales_price},categoryID=#{category.categoryID},income_time=#{income_time} where productID=#{productID}
+  	</update>
+  	
+  	<!-- 7.删 -->
+  	<delete id="deleteProduct" parameterType="int">
+  		delete from products where productID = #{productID}
+  	</delete>
+  	
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.owen.mapper.OrderDetailMapper">
+	<cache />
+
+	<!-- 1.增加订单详情 -->
+	<insert id="insertOrderDetail" parameterType="list">
+		insert into order_detail(orderID,productID,quantity,discount) values 
+		<foreach collection="list" open="" separator="," close="" item="od">
+			(#{od.orders.orderID},#{od.product.productID},#{od.quantity},#{od.discount})
+		</foreach>
+	</insert>
+	
+	<!-- 2.按id批量删订单详情 -->
+	<delete id="deleteOrderDetail" parameterType="list">
+		delete from order_detail where id in
+		<foreach collection="list" open="(" separator="," close=")" item="i">
+			#{i}
+		</foreach>
+	</delete>
+
+	<!-- 3.哟YO批量修改 -->
+	<select id="updateOrderDetail" parameterType="list">
+		<foreach collection="list" open="" separator="" close="" item="i">
+			update order_detail set productID=#{i.product.productID},quantity=#{i.quantity},
+			discount=#{i.discount} where id=#{i.id};
+		</foreach>
+	</select>
+
+</mapper>
